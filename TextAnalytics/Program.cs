@@ -17,39 +17,39 @@ namespace TextAnalytics
 
         public static async Task MainAsync()
         {
-            var workbook = new XLWorkbook("PTNB Data (Consolidated) FINAL.xlsx");
+            var workbook = new XLWorkbook("D:\\prediction market open ends_for thinkiid.xlsx");
             var sheet = workbook.Worksheet(1);
-            sheet.Cell("I1").Value = "Negativity";
-            sheet.Cell("J1").Value = "Neutrality";
-            sheet.Cell("K1").Value = "Positivity";
-            sheet.Cell("L1").Value = "Label";
-            foreach (var row in sheet.Rows(2, sheet.LastRowUsed().RangeAddress.LastAddress.RowNumber))
-            //foreach (var row in sheet.Rows(2, 5))
+            sheet.Cell("O2").Value = "Negativity";
+            sheet.Cell("P2").Value = "Neutrality";
+            sheet.Cell("Q2").Value = "Positivity";
+            sheet.Cell("R2").Value = "Label";
+            foreach (var row in sheet.Rows(3, sheet.LastRowUsed().RangeAddress.LastAddress.RowNumber))
+            //foreach (var row in sheet.Rows(3, 5))
             {
-                var cell = row.Cell(7);
+                var cell = row.Cell(9);
                 var requestString = cell.GetString();
                 // Create the HttpContent for the form to be posted.
                 var requestContent = new FormUrlEncodedContent(new[] { new KeyValuePair<string, string>("text", requestString), });
                 Sentiment sentiment = await Post(requestContent);
                 Console.WriteLine(row.RowNumber());
-                row.Cell(9).Value = sentiment.probability.neg;
-                row.Cell(9).Style.NumberFormat.Format = "0.0%";
-                row.Cell(10).Value = sentiment.probability.neutral;
-                row.Cell(10).Style.NumberFormat.Format = "0.0%";
-                row.Cell(11).Value = sentiment.probability.pos;
-                row.Cell(11).Style.NumberFormat.Format = "0.0%";
+                row.Cell(15).Value = sentiment.probability.neg;
+                row.Cell(15).Style.NumberFormat.Format = "0.0%";
+                row.Cell(16).Value = sentiment.probability.neutral;
+                row.Cell(16).Style.NumberFormat.Format = "0.0%";
+                row.Cell(17).Value = sentiment.probability.pos;
+                row.Cell(17).Style.NumberFormat.Format = "0.0%";
                 if (sentiment.label.Equals("pos"))
-                    row.Cell(12).Value = "Positive";
+                    row.Cell(18).Value = "Positive";
                 else if (sentiment.label.Equals("neg"))
-                    row.Cell(12).Value = "Negative";
+                    row.Cell(18).Value = "Negative";
                 else if (sentiment.label.Equals("error"))
-                    row.Cell(12).Value = "Error";
+                    row.Cell(18).Value = "Error";
                 else
-                    row.Cell(12).Value = "Neutral";
+                    row.Cell(18).Value = "Neutral";
                 //workbook.SaveAs("PTNB Data (Consolidated) FINAL sentiment.xlsx");
             }
             Console.ReadKey();
-            workbook.SaveAs("PTNB Data (Consolidated) FINAL sentiment.xlsx");
+            workbook.SaveAs("D:\\prediction market open ends_for thinkiid sentiment.xlsx");
         }
 
         public static async Task<Sentiment> Post(FormUrlEncodedContent requestContent)
